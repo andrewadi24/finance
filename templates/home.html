@@ -1,0 +1,36 @@
+{% extends "layout.html" %}
+
+{% block title %}
+Home
+{% endblock %}
+
+{% block main %}
+<div class="hero">
+    <h1>Welcome to BullBearBlend!</h1>
+    <a href="#get-started" class="cta-button">Get Started</a>
+</div>
+
+<div class="features">
+    <div class="feature" id="real-time-data">
+        <h2>Real-Time Data</h2>
+        <p>Stay updated with the latest stock prices and market trends.</p>
+    </div>
+    <div class="feature" id="educational-content">
+        <h2>Educational Content</h2>
+        <p>Dive into the dynamic world of stock trading with our 'learn by doing' approach.</p>
+    </div>
+    <div class="feature" id="user-testimonials">
+        <h2>Total transactions</h2>
+        <p>{{total_transactions}}</p>
+    </div>
+</div>
+{% if error %}
+<p class="alert alert-danger mt-3">{{ error }}</p>
+{% endif %}
+{% endblock %}
+
+{% block error %}
+{% if error %}
+<p class="alert alert-danger mt-3">{{ error }}</p>
+{% endif %}
+{% endblock %}
