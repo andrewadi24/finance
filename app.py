@@ -20,7 +20,7 @@ app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
 
 # Configure CS50 Library to use SQLite database
-db = SQL("sqlite:///finance.db")
+db = SQL("sqlite:///mysite/finance.db")
 
 @app.after_request
 def after_request(response):
@@ -69,23 +69,19 @@ def buy():
         try:
             shares = float(shares)
             if shares <= 0 or not shares.is_integer():
-                return apology("")
                 raise ValueError("Shares must be a positive integer.")
             shares = int(shares)  # Convert back to int if it's a whole number
         except ValueError:
-            return apology("")
             return render_template("buy.html", error="Invalid shares")
         shares = int(shares)
         # check if symbol exists in Yahoo Finance
         quote = lookup(symbol)
         if quote is None:
-            return apology("")
             return render_template("buy.html", error = "There is no stock with this symbol")
         user = db.execute('SELECT * FROM users WHERE id = ? LIMIT 1', session['user_id'])[0]
 
         total_cost = shares * quote['price']
         if user['cash'] < total_cost:
-            return apology("")
             return render_template("buy.html", error = "Not enough cash")
 
         # Update user's cash
@@ -177,12 +173,10 @@ def quote():
     else:
         symbol = request.form.get('symbol')
         if not symbol or symbol == "":
-            return apology("")
             return render_template('quote.html', error = "Symbol cannot be blank")
         #Check if symbol is a valid symbol
         quote = lookup(symbol)
         if quote is None:
-            return apology("")
             return render_template('quote.html', error = "Invalid symbol")
         print(quote)
 
@@ -232,20 +226,18 @@ def sell():
     elif request.method == 'POST':
         symbol = request.form.get('symbol')
         amount = int(request.form.get('shares'))
-
+        symbols = db.execute('SELECT symbol FROM inventory WHERE user_id = ?', session['user_id'])
         # Get the current stock price
         quote = lookup(symbol)
         if quote is None:
-            return apology("")
-            return render_template("sell.html", error = "Invalid symbol")
+            return render_template("sell.html", error = "Invalid symbol", symbols = symbols)
 
         # Get current shares of the symbol for the user
         row = db.execute('SELECT * FROM inventory WHERE user_id = ? AND symbol = ?', session['user_id'], symbol)[0]
         print(row)
         # Check if there are enough shares
         if not row or amount > row['shares']:
-            return apology("")
-            return render_template('sell.html', error = "You don't own that much share")
+            return render_template('sell.html', error = "You don't own that much share", symbols = symbols)
 
         # Update cash
         db.execute("UPDATE users SET cash = cash + ? WHERE id = ?", amount * quote['price'], session['user_id'])
