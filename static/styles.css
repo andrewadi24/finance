@@ -24,17 +24,12 @@ nav .navbar-brand .green
 
 body {
     font-family: 'Arial', sans-serif;
-    margin: 0;
-    padding: 0;
+   
+    
     color: #333;
     background-color: #f8f8f8;
 }
-.hero {
-    background-color: #005f73;
-    color: #ffffff;
-    text-align: center;
-    padding: 50px 20px;
-}
+
 .hero h1 {
     margin: 0;
     padding: 0;
@@ -43,7 +38,6 @@ body {
 .cta-button {
     display: inline-block;
     padding: 10px 30px;
-    margin-top: 20px;
     background-color: #0a9396;
     color: #ffffff;
     text-decoration: none;
@@ -251,4 +245,19 @@ body {
     .features {
         flex-direction: column;
     }
+}
+
+.circle{
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background-color: #005f73;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 2em;
+    margin:  auto!important;
+    text-align: center;
+    border: 2px solid black
 }
